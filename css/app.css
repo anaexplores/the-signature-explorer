@@ -1,0 +1,210 @@
+/* css/app.css — the product's single stylesheet. Carried over from the original
+   prototype's <style> block unchanged: theme CSS variables, .card/.row/.gh/.note/
+   .pill/.legend/.sw/.bit/.grid/.cell/.meter — a ready two-theme palette and the v1
+   primitives. Do not invent new buttons/cards; reuse these. */
+:root{
+  --bg:#0e1116; --panel:#161b22; --panel2:#1c232d; --line:#2b3440;
+  --ink:#e6edf3; --dim:#9aa7b4; --accent:#58a6ff; --good:#3fb950;
+  --warn:#d29922; --bad:#f85149; --secret:#bc8cff;
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#f6f8fa; --panel:#fff; --panel2:#f0f3f6; --line:#d0d7de;
+    --ink:#1f2328; --dim:#59636e; --accent:#0969da; --good:#1a7f37;
+    --warn:#9a6700; --bad:#cf222e; --secret:#8250df; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}
+.wrap{max-width:920px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+.sub{color:var(--dim);margin:0 0 20px;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:18px;margin-bottom:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{background:var(--accent);color:#fff;border:0;border-radius:8px;
+  padding:9px 14px;font-size:14px;cursor:pointer;font-weight:600}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+/* wrap is required: on S0 after signing, one tile per symbol (24 of them) lands here,
+   and without wrapping the row spills past the viewport edge — 995px on a 375px screen (K5). */
+.msg{display:flex;gap:8px;flex-wrap:wrap}
+.bit{width:46px;height:46px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel2);font-size:20px;font-weight:700;cursor:pointer;color:var(--ink)}
+.bit.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:auto repeat(2,1fr);gap:8px;margin-top:12px}
+.gh{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.04em;
+  align-self:center;padding:4px}
+.cell{background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+  padding:8px 10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+  display:flex;flex-direction:column;gap:3px;transition:all .25s;min-height:52px;justify-content:center}
+.cell .tag{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
+.cell .hash{color:var(--dim)}
+.cell.hidden .val{color:var(--dim);opacity:.55}
+.cell.revealed{border-color:var(--secret);background:color-mix(in srgb,var(--secret) 14%,var(--panel2))}
+.cell.revealed .val{color:var(--secret);font-weight:700}
+.cell.leaked{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--panel2))}
+.cell.leaked .val{color:var(--bad);font-weight:700}
+.pos{color:var(--dim);font-size:12px;align-self:center;text-align:right;padding-right:4px}
+.meter{height:12px;border-radius:6px;background:var(--panel2);overflow:hidden;border:1px solid var(--line)}
+.meter > i{display:block;height:100%;background:var(--bad);width:0;transition:width .4s}
+.verdict{font-weight:700;margin-top:8px}
+.note{color:var(--dim);font-size:13px;margin-top:8px}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600}
+.pill.good{background:color-mix(in srgb,var(--good) 20%,transparent);color:var(--good)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+code{font-family:ui-monospace,Menlo,monospace;background:var(--panel2);padding:1px 5px;border-radius:4px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* ============================================================================
+   DESIGN TOKENS + inline-style migration classes.
+   Everything ABOVE this line is the original, untouched baseline
+   (computed styles were re-measured against a saved baseline —
+   nothing above may change).
+   Everything BELOW is additive: design tokens (spacing/radius/shadow/duration/
+   type scale) with values chosen to equal the literals the 91 inline `style:`
+   attributes used to hardcode across js/screens/* and js/core/*), plus the
+   classes those inline styles were migrated into. The
+   upcoming skin (css/theme.css) re-values these tokens; this file keeps
+   owning the structural primitives (do not reinvent them).
+   ============================================================================ */
+
+:root{
+  /* Spacing scale — replaces the ad hoc 4/6/8/10/16/24px literals that used
+     to live inline as margin-top/margin-bottom strings. */
+  --space-1:4px; --space-2:6px; --space-3:8px; --space-4:10px;
+  --space-5:16px; --space-6:24px; --space-card:18px;
+
+  /* Radius scale — same literals .card/.cell/.bit/.pill/.sw/code/.meter
+     already used, now named so a skin can raise the "generous radii" in one place. */
+  --radius-xs:3px; --radius-sm:4px; --radius-md:6px; --radius-lg:8px;
+  --radius-xl:12px; --radius-pill:20px;
+
+  /* Shadow/elevation — no shadow existed pre-refactor except the sources
+     "claim highlighted via deep-link" glow; --shadow-none documents that. */
+  --shadow-none:none; --shadow-glow:0 0 0 2px var(--accent);
+
+  /* Duration + easing — the two transitions that existed (.cell, .meter>i)
+     used the browser default timing function ("ease"); named here as a token
+     so a spring-easing skin has exactly one place to change it. */
+  --dur-fast:.25s; --dur-base:.4s; --ease-standard:ease;
+
+  /* Type scale — the font-sizes already in use (10/11/12/13/14/15/20px),
+     named so the skin can retune type rhythm without hunting literals. */
+  --fs-3xs:10px; --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-md:14px;
+  --fs-body:15px; --fs-h1:20px;
+
+  /* Font families. --font-button documents a PRE-EXISTING bug (buttons render
+     in Arial, not the body's system-ui stack — see baseline-styles.json
+      "_bug" note) so a skin has one token to fix; kept as Arial here
+     on purpose so the token refactor stays zero-visual-diff. */
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --font-button:Arial;
+
+  /* Semantic tint tokens — same color-mix formulas .pill.good/.pill.bad
+     already computed inline in this file; named so "success"/"danger" tints
+     are swappable as a pair instead of two separate literals. */
+  --success-bg:color-mix(in srgb,var(--good) 20%,transparent);
+  --danger-bg:color-mix(in srgb,var(--bad) 20%,transparent);
+}
+
+/* .pill.good/.pill.bad now read the named tokens instead of repeating the
+   color-mix formula — same computed value, one definition. */
+.pill.good{background:var(--success-bg)}
+.pill.bad{background:var(--danger-bg)}
+
+/* Spacing utilities — margin-top/-bottom, mapped 1:1 to the literals every
+   inline `style="margin-top:Npx"` used to hardcode across the 5 files. */
+.mt-1{margin-top:var(--space-1)}
+.mt-2{margin-top:var(--space-2)}
+.mt-3{margin-top:var(--space-3)}
+.mt-4{margin-top:var(--space-4)}
+.mt-5{margin-top:var(--space-5)}
+.mb-2{margin-bottom:var(--space-2)}
+.mb-3{margin-bottom:var(--space-3)}
+.m-0{margin:0}
+
+/* Layout utilities — the flex/alignment fragments that used to be inline. */
+.flex-1{flex:1}
+.self-end{align-self:flex-end}
+.row-between{justify-content:space-between}
+.row-between-center{justify-content:space-between;align-items:center}
+.next-row{justify-content:flex-end;margin-top:var(--space-4)}
+
+/* Text input — was duplicated byte-for-byte as an inline style in both
+   intro.mjs and ecdsa.mjs (a duplication anti-pattern). */
+.field{width:100%;padding:var(--space-3);border-radius:var(--radius-lg);
+  border:1px solid var(--line);background:var(--panel2);color:var(--ink);
+  font-size:var(--fs-md)}
+
+/* Monospace code values (hex output) — was three separately-declared local
+   `codeStyle` consts in intro.mjs/ecdsa.mjs/sources.mjs, now one class. */
+.mono{word-break:break-all;font-family:var(--font-mono)}
+
+/* Wide bit-buttons for the S0 tamper-a-character row (bit.bit is 46x46 by
+   default; the tampered message renders characters, not single bits). */
+.bit-wide{width:auto;min-width:32px;padding:var(--space-2) var(--space-3)}
+
+/* "Next -->" link at the bottom of every screen. */
+.next-link{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* Progress-dot pills (S0/S1/S2 header) — state used to be picked by
+   string-concatenating an inline `style` per dot; now picked by class at
+   render time (still a full re-render per js/core/dom.mjs#mount, so this is
+   the classList-equivalent the state bucket needed). */
+.progress-dot{margin-right:var(--space-2)}
+.pill.is-current{background:var(--accent);color:#fff}
+.pill.is-upcoming{background:var(--panel2);color:var(--dim)}
+
+/* Danger-state cards (quantum key recovery, nonce-reuse forgery, Lamport
+   forge result). border-width is raised so "this is a danger container" is
+   never color-only (accessibility fix) — text labels
+   ("verified", the verdict copy) already carried the meaning; this adds a
+   redundant shape/weight signal alongside the border color. */
+.card--danger{background:var(--panel2);border-color:var(--bad);border-width:2px}
+.card--danger-border{border-color:var(--bad);border-width:2px}
+.verdict--danger{color:var(--bad)}
+
+/* Legend swatches (S2 grid legend: hidden / revealed / leaked) — previously
+   color-only (accessibility fix). Border-style AND shape
+   now differ too, so the distinction survives grayscale/colorblind viewing
+   even before reading the adjacent text label:
+     hidden    — solid border,  rounded-square (unchanged from before)
+     revealed  — dashed border, circle
+     leaked    — thick solid border, sharp square */
+.sw--hidden{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-xs)}
+.sw--revealed{background:var(--secret);border:1px dashed var(--ink);border-radius:50%}
+.sw--leaked{background:var(--bad);border:2px solid var(--ink);border-radius:0}
+
+/* "Where this comes from" / provenance registry (js/core/sources.mjs) —
+   tech-noir typographic restraint lands here in the skin; the base layer only
+   moves the existing literals into named classes. */
+.claim-card{margin-bottom:var(--space-4)}
+.claim-card--highlight{border-color:var(--accent);box-shadow:var(--shadow-glow)}
+.claim-text{margin:0 0 var(--space-2);font-weight:600}
+.claim-refs{margin:0;padding-left:18px;color:var(--dim);font-size:var(--fs-xs);line-height:1.7}
+.pending-pill{margin-left:var(--space-2);opacity:.75;font-size:var(--fs-2xs)}
+.cite-block{display:block;white-space:pre-wrap;word-break:break-word;
+  font-family:var(--font-mono);font-size:var(--fs-xs);padding:var(--space-3);
+  border-radius:var(--radius-lg);background:var(--panel2);
+  margin-top:var(--space-2);user-select:all}
+
+/* Build-integrity footer line (S0). */
+.build-integrity{margin-top:var(--space-5);font-size:var(--fs-2xs);opacity:.7;
+  font-family:var(--font-mono)}
+
+/* Lens ("3 questions") tiles — js/core/lens.mjs. */
+/* .lens-tile is a <div> on S1/S2 (plain, answer already known) and a real <button> on
+   S0 (clickable, accessibility fix 2026-09-29 — see js/core/lens.mjs). The reset
+   properties below undo app.css's own global `button{...}` chrome (accent background,
+   white text, padding, radius) so the clickable variant still looks like the same
+   plain flex/text block as the non-clickable one — harmless no-ops on the <div>
+   variant, which never had that chrome to begin with. */
+.lens-tile{
+  flex:1;min-width:200px;
+  background:transparent;border:0;padding:0;margin:0;text-align:left;
+  font:inherit;color:inherit;cursor:default;
+}
+.lens-tile.is-clickable{cursor:pointer}
+.lens-question{font-weight:700;margin:0 0 var(--space-1)}

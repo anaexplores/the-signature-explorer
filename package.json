@@ -1,0 +1,22 @@
+{
+  "name": "the-signature-explorer",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=19"
+  },
+  "devDependencies": {
+    "@noble/curves": "1.9.7",
+    "@noble/hashes": "1.8.0",
+    "esbuild": "0.28.1",
+    "playwright": "1.63.0"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "check": "node tools/build.mjs --check",
+    "test": "node test/schemes.smoke.mjs",
+    "check:k5": "node tools/checks/lib/k5-audit.mjs",
+    "check:release": "node tools/checks/check.mjs --release",
+    "check:all": "node tools/checks/check.mjs"
+  }
+}

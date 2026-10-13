@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.cache/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# Local editor/agent settings — never published.
+.claude/
+
+# NB: build/ is intentionally NOT ignored: build/{intro,ecdsa,hash}.js and
+# build/BUILD.md are committed artifacts (the pages load them; K9 verifies they stay
+# in sync with js/**). js/vendor/noble.mjs and js/vendor/noble.PROVENANCE.md are
+# likewise committed (pinned vendor bundle with a recorded sha256).

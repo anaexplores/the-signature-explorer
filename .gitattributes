@@ -1,0 +1,6 @@
+# Store and check out text with LF everywhere. The committed bundles in build/ and
+# js/vendor/noble.mjs are compared byte-for-byte with a fresh rebuild (K9) and their
+# sha256 is recorded; CRLF conversion on Windows checkouts would break both.
+* text=auto eol=lf
+
+*.png binary

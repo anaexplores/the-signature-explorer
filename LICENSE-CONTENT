@@ -1,0 +1,46 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Scope (SPEC §8.5, P2 — owner decision 2026-09-22): this license covers the
+CONTENT of The Signature Explorer — everything under docs/**, the English
+strings in js/i18n/** (the text values, not the code that reads them),
+diagrams, and screenshots. Code (js/**, tools/**, test/**, css/**) is licensed
+separately under MIT — see LICENSE.
+
+You are free to:
+
+  Share — copy and redistribute the material in any medium or format
+  Adapt — remix, transform, and build upon the material
+  for any purpose, even commercially.
+
+The licensor cannot revoke these freedoms as long as you follow the license
+terms.
+
+Under the following terms:
+
+  Attribution — You must give appropriate credit, provide a link to the
+  license, and indicate if changes were made. You may do so in any reasonable
+  manner, but not in any way that suggests the licensor endorses you or your
+  use.
+
+  No additional restrictions — You may not apply legal terms or technological
+  measures that legally restrict others from doing anything the license
+  permits.
+
+Notices:
+
+You do not have to comply with the license for elements of the material in
+the public domain or where your use is permitted by an applicable exception
+or limitation.
+
+No warranties are given. The license may not give you all of the permissions
+necessary for your intended use. For example, other rights such as publicity,
+privacy, or moral rights may limit how you use the material.
+
+This is the human-readable summary of (and not a substitute for) the license.
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+License deed: https://creativecommons.org/licenses/by/4.0/
+
+Suggested attribution (see also the "Cite this page" block on every screen of
+the tool itself):
+
+  The Signature Explorer (anaexplores), licensed under CC BY 4.0.

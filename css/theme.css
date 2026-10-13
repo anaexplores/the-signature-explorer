@@ -1,0 +1,236 @@
+/* css/theme.css — "Clean indie puzzle" skin (design direction "Clean indie puzzle" + two grafts: tech-noir
+   typographic restraint on provenance/cite, arcade-style glow/pulse reserved for exactly
+   one moment — a grid position turning "leaked").
+   Loaded AFTER css/app.css on all three pages. app.css (everything above its own
+   "DESIGN TOKENS" marker) is UNTOUCHED — this file only re-values custom properties
+   and adds/overrides rules; it never edits app.css. Because almost every color in
+   app.css already reads `var(--bg|--panel|--panel2|--line|--ink|--dim|--accent|--good|
+   --bad|--secret)` instead of a literal, re-valuing them here re-themes most of the
+   product with zero selector rewrites — the overrides below are only for the things
+   the base layer deliberately left as literals (radius/transition on the original
+   rules) plus genuinely new skin behavior (motion, glow, hover, provenance restraint).
+   No JS was touched for this skin — one caveat
+   (pop-in replays on any full re-render, not only on the state transition, because
+   js/core/dom.mjs#mount() always rebuilds the whole tree; documented, not silently
+   shipped). */
+
+/* ============================================================================
+   1) COLOR RE-THEME — dark (default) + light. Values from design-directions.html's
+      .dir-puzzle / .dir-puzzle.alt blocks, ported 1:1 onto app.css's existing token
+      names (they already match: --bg/--panel/--panel2/--line/--ink/--dim/--accent/
+      --good/--bad/--secret). --warn is untouched (app.css declares it but nothing
+      renders with it, dark or light — grepped before touching anything).
+   ============================================================================ */
+:root{
+  --bg:#1b1f24; --panel:#22272e; --panel2:#2a3038; --line:#3a4048;
+  --ink:#eef1f4; --dim:#95a0ab; --accent:#7ee0c3; --good:#7ee0c3;
+  --bad:#ff8a7a; --secret:#c9a6ff;
+
+  /* Text color for anything painted directly ON --accent (button, .bit.on, the
+     "current screen" progress dot). app.css hardcodes color:#fff for all three
+     (a literal from the old blue accent) — with this palette's
+     light mint accent, white text drops to a failing ~1.5:1 contrast. Verified by
+     hand: --on-accent-ink (#12241d) against #7ee0c3 -> ~13.3:1, against the light
+     theme's #0f8f6f -> ~5.2:1. Both clear WCAG AA for 14px bold button text. */
+  --on-accent-ink:#12241d;
+
+  /* Generous radii. app.css's OWN rules (.card/.cell/
+     .bit/.meter/button/.field) still hardcode their original literal radius —
+     these tokens only take effect via the explicit override rules in section 3
+     below; bumping the token alone does not touch app.css. */
+  --radius-lg:12px; --radius-xl:16px; --radius-md:8px;
+
+  /* Spring easing + the two durations the base layer deliberately left wired to literals
+     (.cell's "all .25s", .meter>i's "width .4s") — now spring-easeable in one place. */
+  --ease-standard:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:.3s; --dur-base:.5s;
+
+  /* Same stack as body's `font:15px/1.5 system-ui,...` (app.css line 17). Form
+     controls (button/input/select/textarea) do NOT inherit an ancestor's `font`
+     under the browser's own UA stylesheet — that's the actual mechanism behind
+     the pre-existing Arial bug, not a specificity problem (author CSS always
+     beats UA-origin styles regardless of selector weight; the rule was simply
+     never written). Declared here, applied in section 3. */
+  --font-button:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f5f2ec; --panel:#fff; --panel2:#eee9df; --line:#dcd5c6;
+    --ink:#2b2a26; --dim:#7a7566; --accent:#0f8f6f; --good:#0f8f6f;
+    --bad:#d3543f; --secret:#7a4fc9;
+  }
+}
+
+/* ============================================================================
+   2) prefers-reduced-motion — disables every spring/pop-in/pulse/hover-transform
+      added by this file. States still change (classes still swap), they just do
+      it instantly instead of animating (brief requirement #4).
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+/* ============================================================================
+   3) RADIUS + DURATION/EASING overrides on app.css's original rules. Each of
+      these is a same-specificity, later-in-cascade override — app.css itself is
+      untouched (verified: no changes to app.css from the accepted base
+      state).
+   ============================================================================ */
+.card{border-radius:var(--radius-xl)}
+.cell{
+  border-radius:var(--radius-lg);
+  transition:transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast), border-color var(--dur-fast);
+}
+.bit{border-radius:var(--radius-lg);transition:transform var(--dur-fast) var(--ease-standard),
+  background var(--dur-fast), border-color var(--dur-fast)}
+.meter{border-radius:var(--radius-md)}
+.meter > i{transition:width var(--dur-base) var(--ease-standard)}
+button{border-radius:var(--radius-lg);color:var(--on-accent-ink);
+  transition:transform var(--dur-fast) var(--ease-standard), background var(--dur-fast)}
+/* The actual Arial fix (previously only declared as intent in the token comment
+   above, never written as a rule — corrected after review). .bit is always a
+   <button class="bit"> (see js/core/dom.mjs usages in hash.mjs/intro.mjs), so it
+   already inherits this from the `button` type-selector rule alone; it's listed
+   explicitly anyway so that fact is asserted in code, not left implicit. Decision
+   (point 2): .bit keeps the system-sans stack rather than switching to monospace
+   — the "Clean indie puzzle" design mock's own .bitx has no
+   font-family override either (it inherits the stage's system-ui, not a mono
+   face), and a friendly rounded sans reads more "puzzle piece" than a mono
+   digit for a single 0/1 glyph. .field (the two <input class="field"> message
+   boxes in intro.mjs/ecdsa.mjs) had the same gap — the base `.field` class
+   never set font-family either; fixed here too. No <select>/<textarea> exist
+   anywhere in the product (grepped) — the one `document.createElement("textarea")`
+   in js/core/sources.mjs is an invisible clipboard-fallback element, never
+   rendered, so it needs no fix. */
+button, .bit, .field{font-family:var(--font-button)}
+.field{border-radius:var(--radius-lg)}
+.bit.on{color:var(--on-accent-ink)}
+.pill.is-current{color:var(--on-accent-ink)}
+
+/* ============================================================================
+   4) MOTION — spring pop-in on reveal, hover-scale on genuinely interactive
+      controls only. Deliberate scope decision: the design mock's
+      also hover-scales the grid CELLS, but in the real app (js/screens/hash.mjs)
+      cells have no onclick — they are display-only. Adding a hover affordance to
+      a non-interactive element would signal a click target that doesn't exist,
+      so cells get the pop-in-on-reveal treatment but NOT the hover-scale; only
+      real controls (button, .ghost, .bit) get hover-scale.
+   ============================================================================ */
+@keyframes signature-explorer-pop-in{
+  0%{transform:scale(.85);opacity:0}
+  60%{transform:scale(1.05)}
+  100%{transform:scale(1);opacity:1}
+}
+
+.cell.revealed{animation:signature-explorer-pop-in var(--dur-fast) var(--ease-standard)}
+
+/* Card reveals (S1 quantum-key panel, S2 forge result) get the same satisfying
+   "click into place" entrance as a grid cell — consistent language, still no glow. */
+.card--danger{animation:signature-explorer-pop-in var(--dur-base) var(--ease-standard)}
+.card--danger-border{animation:signature-explorer-pop-in var(--dur-base) var(--ease-standard)}
+
+button:not(:disabled):hover, .bit:hover{transform:scale(1.03) translateY(-2px)}
+.bit.on{transform:scale(1.08)}
+button.ghost{border:1.5px dashed var(--line);background:transparent}
+button.ghost:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent)}
+button.ghost:active{transform:scale(.97)}
+.next-link:hover{transform:translateY(-1px)}
+
+/* ============================================================================
+   5) THE CLIMAX — a position turning "leaked" (both halves revealed = the key
+      just burned) is the ONLY place glow/pulse appears anywhere in the product.
+      Two finite pulses, not a loop — the brief is explicit that carnival/looping
+      glow is exactly what this direction avoids everywhere else.
+   ============================================================================ */
+@keyframes signature-explorer-leak-pulse{
+  0%,100%{box-shadow:0 0 0 rgba(0,0,0,0)}
+  50%{box-shadow:0 0 16px color-mix(in srgb, var(--bad) 55%, transparent)}
+}
+.cell.leaked{
+  animation:signature-explorer-pop-in var(--dur-fast) var(--ease-standard),
+    signature-explorer-leak-pulse .8s ease-in-out 2;
+}
+
+/* ============================================================================
+   6) PROVENANCE / CITE — tech-noir typographic restraint graft. These cards are
+      cited, not played with: no pop-in, no hover-scale, no glow, a tighter
+      (non-"generous") radius than the rest of the skin, and a plain accent
+      spine instead of the puzzle direction's soft floating-card look. Copy/
+      toggle BUTTONS inside them keep the ordinary interactive hover from
+      section 4 (that's plain usability, not "play") — only the CARD CHROME is
+      dampened.
+   ============================================================================ */
+.claim-card{border-radius:var(--radius-lg);border-left:3px solid var(--accent)}
+.claim-refs{letter-spacing:.01em}
+.cite-block{border-radius:var(--radius-md);letter-spacing:.01em}
+
+/* ============================================================================
+   7) TOUCH TARGETS (K5: touch targets >= 44 px) — pre-existing gap, not a
+      regression from this skin: app.css's base `button{padding:9px 14px;
+      font-size:14px}` has always measured ~36px tall (live 375px
+      measurement: Reset progress 123x38, Generate a key pair 151x36, Sign this
+      message 142x36, All sources toggle 263x38, Cite this page 116x38 — every
+      <button> in the product, plain and .ghost alike, since both share the same
+      base box model). Raised via min-height, NOT font-size, so the skin's type
+      scale is untouched — only the box gets taller; content is re-centered with
+      flex so the extra height doesn't just pad the bottom.
+
+      Scoped to <=480px (a hair above K5's 390px target, the smallest breakpoint
+      the product is tested against) rather than applied globally: on a desktop
+      pointer, every button in this product already sits well clear of the
+      44px accessibility floor in absolute terms of CLICK precision (mouse, not
+      finger) and the "Clean indie puzzle" language is deliberately tight/flat —
+      stretching every button to 44px tall on desktop measurably puffs up the
+      compact card layout (e.g. "Generate a key pair" would jump from ~36px to
+      44px next to 12-14px labels) for no accessibility benefit nobody there
+      needs. 480px is where touch is the primary input in practice; this is a
+      judgment call, not a spec requirement — flagging it as one. */
+@media (max-width:480px){
+  button{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  /* S0 symbol tiles are touch targets (tapping one corrupts the symbol), not text: 32px wide
+     does not reach the K5 threshold. At 390px, 24 tiles of 44px wrap into three rows —
+     .msg{flex-wrap:wrap} handles this (see app.css). Found by the automated K5 audit. */
+  .bit-wide{min-width:44px}
+}
+
+/* ============================================================================
+   8) FOCUS VISIBILITY (accessibility audit). Checked first: nothing in
+   app.css or this file ever sets `outline:none`/`outline:0`, so the browser's own
+   default focus ring was never actually suppressed — but it's whatever the user's
+   browser/OS decides (sometimes a thin default outline that reads poorly against
+   the dark theme's low-contrast panels). Adding an explicit, on-brand ring rather
+   than relying on an accidental default. :focus-visible (not :focus) so it shows
+   for keyboard navigation without adding a ring on every mouse click — supported by
+   all current evergreen browsers, degrades to no ring (not a broken one) on anything
+   that doesn't understand the selector.
+   ============================================================================ */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   LINK COLOR (dark theme). No rule set a link color, so links (e.g. the source
+   list under "Where this comes from") used the browser default blue #0000ee —
+   1.6:1 on the dark --panel, close to unreadable. In dark, links take --accent
+   (~9.9:1 on --panel). Light keeps the browser default on purpose: --accent there
+   (#0f8f6f) is only ~4.1:1 on white, below WCAG AA, while the default blue passes.
+   ============================================================================ */
+/* :where() keeps specificity at zero, so any class that already colors a link
+   (.next-link, progress pills) still wins, visited or not. */
+:where(a, a:visited) { color: var(--accent); }
+@media (prefers-color-scheme: light){
+  :where(a, a:visited) { color: revert; }
+  /* "Next →" uses --accent (#0f8f6f), ~3.6:1 on the light --bg — below AA. A darker
+     shade of the same green for this link only; the --accent token stays as is. */
+  .next-link { color: #0b6e55; }
+}

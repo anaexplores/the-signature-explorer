@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hash-Based Signatures Explained — Lamport, XMSS, SPHINCS+</title>
+<meta name="description" content="Sign with a real Lamport one-time key, burn it by reusing it, then walk the path to XMSS, FORS, and SPHINCS+ (SLH-DSA) — the hash-based, post-quantum-safe signature family." />
+<!--
+  S2: block A is the Lamport one-time signature
+  interactive (ported from the original prototype); block B is the Merkle/FORS/SPHINCS+
+  question path; block C closes with the size comparison and the ending.
+
+  SEO <head> metadata: tuned for seed queries "hash based
+  signatures explained", "why one-time signature can't be reused", "lamport signature
+  interactive", "post-quantum signatures explained", "xmss sphincs+ explained".
+  og:url/link[rel=canonical]/og:image are STATIC absolute URLs (link-preview bots run no JS); gate K10.7 keeps them equal to SITE.canonicalBase; js/core/site-meta.mjs only syncs them at runtime.
+-->
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="canonical" href="https://anaexplores.github.io/the-signature-explorer/hash.html" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://anaexplores.github.io/the-signature-explorer/hash.html" />
+<meta property="og:image" content="https://anaexplores.github.io/the-signature-explorer/social-preview.png" />
+<meta property="og:image:alt" content="A hash-based one-time signature key after reuse, with the leaked secret halves highlighted in red" />
+<meta property="og:title" content="Hash-Based Signatures Explained — Lamport, XMSS, SPHINCS+" />
+<meta property="og:description" content="Sign with a real Lamport one-time key, burn it by reusing it, then walk the path to XMSS, FORS, and SPHINCS+ — the hash-based, post-quantum-safe family." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://anaexplores.github.io/the-signature-explorer/social-preview.png" />
+<meta name="twitter:title" content="Hash-Based Signatures Explained — Lamport, XMSS, SPHINCS+" />
+<meta name="twitter:description" content="Sign with a real Lamport one-time key, burn it by reusing it, then walk the path to XMSS, FORS, and SPHINCS+ — the hash-based, post-quantum-safe family." />
+<link rel="stylesheet" href="css/app.css" />
+<link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="build/hash.js" defer></script>
+</body>
+</html>

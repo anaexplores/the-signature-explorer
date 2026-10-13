@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this, please cite it as below."
+title: "The Signature Explorer"
+type: software
+authors:
+  - alias: anaexplores
+version: "2026-09-28"
+date-released: "2026-09-28"
+url: "https://anaexplores.github.io/the-signature-explorer/"
+repository-code: "https://github.com/anaexplores/the-signature-explorer"
+license: MIT
+abstract: >-
+  An interactive explainer of digital signatures: real ECDSA on secp256k1,
+  ECDSA nonce reuse and private key recovery, Lamport one-time signatures, and
+  the hash-based post-quantum path through XMSS and FORS to SPHINCS+ (SLH-DSA).
+  Code is licensed MIT; content (text, diagrams, screenshots) is licensed
+  CC BY 4.0.
+keywords:
+  - digital signatures
+  - post-quantum cryptography
+  - ECDSA
+  - nonce reuse
+  - Lamport
+  - SPHINCS+
+  - SLH-DSA
+  - XMSS
+  - education
+  - interactive
