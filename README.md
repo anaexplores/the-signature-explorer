@@ -102,8 +102,10 @@ The site runs straight from disk: open `index.html` in a browser. There is no se
 
 ## License and citation
 
-- Code: MIT, see `LICENSE`.
-- Content (text, diagrams, screenshots): CC BY 4.0, see `LICENSE-CONTENT`.
+The project is dual-licensed by kind of material:
+
+- **Code: MIT**, see `LICENSE`. Covers everything under `js/`, `tools/`, `test/` and `css/` (including the code in `js/i18n/` that reads the strings).
+- **Content: CC BY 4.0**, see `LICENSE-CONTENT`. Covers `docs/`, the English text values in `js/i18n/`, diagrams and screenshots.
 
 To cite, use the project name and the permanent URL:
 

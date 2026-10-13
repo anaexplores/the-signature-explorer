@@ -184,7 +184,7 @@ The provenance review deliberately did **not** add these rows to the table in a 
 
 ### C-13 · Size comparison: SLH-DSA-128s versus ECDSA
 
-> Added to the data with the S2 hash-branch screen (`js/data/claims.mjs`, `[dev-only]` removed in the same commit). The line lives in **S2 block C**, as exactly one comparison line (decision O3) — not a table.
+> Added to the data with the S2 hash-branch screen (`js/data/claims.mjs`, `[dev-only]` removed in the same commit). The line lives in **S2 block C**, as exactly one comparison line (the one-comparison-line rule) — not a table.
 
 - **Product statement (EN):** *"An SLH-DSA-128s signature is {slhdsaSigBytes} bytes against {ecdsaSigBytes} for ECDSA on secp256k1 — that is the price of needing nothing but a hash function. The public key stays small: {slhdsaPkBytes} bytes."*
 - **Screens:** `s2` · **kind:** `standard` · **figures:** `slhdsaSigBytes: 7856`, `slhdsaPkBytes: 32`, `ecdsaSigBytes: 64`
@@ -195,7 +195,7 @@ The provenance review deliberately did **not** add these rows to the table in a 
   - ℹ️ **Data cross-check 2026-09-28:** in `js/data/claims.mjs`, C-13 has **no `ref` on YP** (only FIPS205 §11 Table 2 + SEC2 §2.4.1, both `verified:true`). The YP mention above is registry context, not a locator of the entry. Consequently **YP touches three data entries (C-2, C-10, C-18), not four** — the wording "touches C-2, C-10, C-13, C-18 at once" in an earlier summary was inaccurate for C-13; corrected here.
   - **Subtlety — CLOSED BY A STATEMENT OF FACT, not by a check ([VERIFY] #6):** the **SLH-DSA-128s private key = 64 bytes** (`SK = SK.seed ‖ SK.prf ‖ PK.seed ‖ PK.root`, each `n=16` ⇒ `4n=64`) — this value is **not in Table 2**; it would be derived from FIPS205 §9.1 / the key format. **Checked in code 2026-09-28: the screen does NOT show this number** — `figures` of C-13 = `{ slhdsaSigBytes: 7856, slhdsaPkBytes: 32 }`, the keys `claim.c13.text` / `s2.blockC.*` in `js/i18n/en.js` say nothing about the SLH-DSA private key, and a grep over `js/**` for the SLH-DSA private key gives zero. So **checking §9.2/§9.1 is not required and no locator is created**: a nonexistent `ref` has nothing to verify, and there is no `verified:false` for this item in the data. The note is closed by the **statement "does not reach the screen"**; K10.7 is unaffected.
     - 🚩 **Condition for reopening:** if the screen ever shows the SLH-DSA private key, that requires a **separate by-eye check of FIPS 205 §9.1** and a separate `ref`, **not** Table 2. An implementer does not add such an entry on their own.
-  - **Constraint O3:** exactly **one** comparison line, not a table. The third number (ML-DSA-44, C-20) is **not placed** on S2 — only on S0.
+  - **Design rule (one comparison line):** exactly **one** comparison line, not a table. The third number (ML-DSA-44, C-20) is **not placed** on S2 — only on S0.
 
 ---
 
@@ -263,7 +263,7 @@ The provenance review deliberately did **not** add these rows to the table in a 
 
 - **Product statement (EN):** *"This is not a future problem: since September 2026 Cloudflare's 1.1.1.1 resolver validates post-quantum DNSSEC signatures made with ML-DSA-44 — {mldsa44SigBytes} bytes each, against {ecdsaSigBytes} for the ECDSA signatures DNSSEC uses today."*
 - **Screens:** `s0` · **kind:** `measurement` · **figures:** `mldsa44SigBytes: 2420`, `ecdsaSigBytes: 64`
-- **On-screen context:** the new key `s0.landing.pqLive`, next to `s0.landing.nft` / `s0.landing.everyday`. **One line, with no elaboration** (same rule as O2). **Not placed on S2** — a third number next to the SLH-DSA vs ECDSA comparison breaks O3.
+- **On-screen context:** the new key `s0.landing.pqLive`, next to `s0.landing.nft` / `s0.landing.everyday`. **One line, with no elaboration.** **Not placed on S2** — a third number next to the SLH-DSA vs ECDSA comparison would break the one-comparison-line rule.
 - **Primary sources (it matters to tell the two apart):**
   1. **The event** (what was switched on and when) — CF-PQDNS, Cloudflare Blog, 2026-09-10: 1.1.1.1 validates post-quantum DNSSEC on ML-DSA-44. ⚠️ **A vendor announcement, NOT a standard.** The UI captions it exactly so (`kind: measurement` → "announced by", not "defined in"). [primary ✓ web as a vendor announcement]
   2. **The scheme and size** — FIPS204 **§4, Table 2 «Sizes (in bytes) of keys and signatures of ML-DSA»**: ML-DSA-44 → **signature 2420 bytes**, pk 1312 bytes. [primary ✓ web, checked against the PDF 2026-09-22]
@@ -331,9 +331,9 @@ The provenance review deliberately did **not** add these rows to the table in a 
 - **Verdict:** 🟢 on existence and place in the standard. ⚠️ **A quantitative statement of "gradual degradation" is forbidden on the screen without a separate check:** the concrete FORS parameters (`k`, `t`, `a`) and the security bounds tied to them are in FIPS205 **§11 Table 1** and in the SPHINCS+ analysis; if the screen **names FORS numbers**, they are added as a separate entry with a checked locator, not derived "by sense".
   - 🚫 **WARNING TO IMPLEMENTERS (provenance review decision, 2026-09-28): the FORS numbers `k`, `t`, `a` are NOT put on the screen.** This is not "not checked yet" but a deliberate refusal:
     1. **The question path on that screen is conceptual** (three expandable question-steps). `k`/`t`/`a` explain nothing to the reader without a parameter table beside them.
-    2. **Extra numbers pull toward a size table, which decision O3 forbids** ("exactly one comparison line, do not expand into a table" — size tables are what a competing visualizer does, and we distance ourselves from it). A second number on the screen immediately breeds a third.
+    2. **Extra numbers pull toward a size table, which the one-comparison-line rule forbids** ("exactly one comparison line, do not expand into a table" — size tables are what a competing visualizer does, and we distance ourselves from it). A second number on the screen immediately breeds a third.
     3. Practical consequence: **no value** is entered in `figures` of C-24, and the text of step 2 in `js/i18n/en.js` **must not contain any numeric literal** (otherwise K10.4b is red, and rightly so). The wording of step 2 is taken verbatim from the `Product statement (EN)` above — it deliberately uses no numbers.
-    4. If the owner later wants numbers, that is a **separate registry entry** (the next free C-N) with a checked FIPS205 §11 Table 1 locator **and** a separate project decision against O3. An implementer does not add such an entry on their own.
+    4. If numbers are wanted later, that is a **separate registry entry** (the next free C-N) with a checked FIPS205 §11 Table 1 locator **and** a deliberate exception to the one-comparison-line rule. An implementer does not add such an entry on their own.
 
 ### C-25 · SLH-DSA: no state at all (step 3)
 

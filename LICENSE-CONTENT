@@ -1,6 +1,6 @@
 Creative Commons Attribution 4.0 International (CC BY 4.0)
 
-Scope (SPEC §8.5, P2 — owner decision 2026-09-22): this license covers the
+Scope: this license covers the
 CONTENT of The Signature Explorer — everything under docs/**, the English
 strings in js/i18n/** (the text values, not the code that reads them),
 diagrams, and screenshots. Code (js/**, tools/**, test/**, css/**) is licensed
