@@ -32,6 +32,8 @@
 //     K10.8  the canonical anchor id="claim-<id>" occurs exactly once per screen (real render)
 //     K10.9  regression guard for two plausible-but-wrong locators (c11 FIPS 202, c21 Lamport/DH76)
 //     K10.10 no unexplained number in the HTML <head> metatags (title/description/og/twitter)
+//   K12   Every committed *.svg (e.g. favicon.svg) is well-formed XML (lib/xml-wellformed.mjs):
+//         browsers silently drop an SVG image on the first XML error.
 //   Also: secret-scan (lib/secret-scan.mjs) over git-tracked files, and no tracked .env.
 
 import fs from "node:fs";
@@ -41,6 +43,7 @@ import { spawnSync, execFileSync } from "node:child_process";
 import { scanRepo } from "./lib/secret-scan.mjs";
 import { runClaimsGate } from "./lib/claims-gate.mjs";
 import { runK5Audit } from "./lib/k5-audit.mjs";
+import { runSvgGate } from "./lib/xml-wellformed.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url)); // <project>/tools/checks
 function repoRoot() {
@@ -207,6 +210,12 @@ if (hitsK7js.length || hitsK7html.length) {
 } else {
   say("✓ K7 passed - crypto logic lives only in js/schemes/ and js/vendor/.");
 }
+
+// 4b) K12 - SVG files are well-formed XML (a broken favicon is otherwise invisible).
+say("▶ K12 SVG well-formedness…");
+const svgResult = runSvgGate({ root: ROOT });
+for (const line of svgResult.messages) say(line);
+if (svgResult.failed) failed = true;
 
 // 5) K10 - provenance registry. --release also enables K10.7.
 say("▶ K10 provenance registry…");

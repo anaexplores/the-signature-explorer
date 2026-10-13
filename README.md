@@ -7,9 +7,9 @@ The Signature Explorer walks through digital signatures with real code instead o
 
 **Live site: https://anaexplores.github.io/the-signature-explorer/**
 
-![The intro screen: sign a message, tamper with it, show the private key](docs/screenshots/intro.png)
+![Signing twice with one Lamport key: three positions leak both secret halves, and a message nobody signed passes the real verifier](docs/screenshots/hero-key-burned.gif)
 
-<!-- hero GIF goes here -->
+![The intro screen: sign a message, tamper with it, show the private key](docs/screenshots/intro.png)
 
 ## One lens, three questions
 
@@ -95,6 +95,7 @@ npm test               # crypto smoke test
 npm run check:all      # all gates
 npm run check:release  # full release gates, including the browser layout audit
 npm run check:k5       # layout audit alone (headless browser)
+node tools/record-hero-gif.mjs --theme dark --out ../hero-out   # re-record the README GIF (needs ffmpeg)
 ```
 
 The site runs straight from disk: open `index.html` in a browser. There is no server, no backend and no external requests. The bundles in `build/` are classic scripts, so `file://` works. Cryptography comes from the `@noble/curves` and `@noble/hashes` libraries, vendored in `js/vendor/`.
