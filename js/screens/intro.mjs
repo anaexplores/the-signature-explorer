@@ -30,7 +30,7 @@ const SCREEN_ID = "s0";
 // Provenance registry input: the claims THIS screen shows, in the order
 // they're shown — also the actual K10.3 render-input, not a decorative duplicate.
 export const RENDERED_CLAIMS = ["c2", "c3", "c4", "c14", "c15", "c16", "c17", "c18", "c19", "c20"];
-const DEFAULT_MESSAGE = "I authorize this payment";
+const DEFAULT_MESSAGE = "Meet me at noon";
 const EXPECTED_SHA256_ABC = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
 
 // Fixed demo key — same js/schemes/ecdsa.mjs keygen(), just with an rng
@@ -165,6 +165,7 @@ function renderShowKeyCard() {
       ? el("div.mt-4", {}, [
           el("div.gh", { text: t("s0.showKey.label", { ecdsaPrivBytes: FIGURES.ecdsaPrivBytes }) }),
           el("code.mono", { text: toHex(demoKeys.d) }),
+          el("p.note.mt-2", { text: t("s0.showKey.demo") }),
           el("p.note.mt-2", { text: t("s0.showKey.note") }),
         ])
       : null,

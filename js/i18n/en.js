@@ -172,8 +172,8 @@ export default {
   // then the neutral lens as a frame for what's coming on S1/S2.
   "s0.title": "What is a signature?",
   "s0.subtitle": "Prove you hold the secret — without showing it.",
-  "s0.metamask.card": "Sign message",
-  "s0.metamask.anchor": "That thing you click in MetaMask — this is what it actually does.",
+  "s0.metamask.card": "Signature demo",
+  "s0.metamask.anchor": "That thing you click in a crypto wallet — this is what it actually does.",
 
   "s0.msg.label": "Message",
   "s0.hash.label": "SHA-256 (first 16 hex):",
@@ -185,11 +185,15 @@ export default {
 
   "s0.showKey.button": "Show the private key",
   "s0.showKey.label": "Private key d ({ecdsaPrivBytes} bytes):",
+  // Honest framing for the revealed key: it is a fixed demo key (DEMO_PRIV_BYTES in
+  // js/screens/intro.mjs), not generated per visitor, and the page makes no network
+  // requests. No digits here on purpose (K10.4b).
+  "s0.showKey.demo": "A fixed demo key, the same for every visitor — not a real wallet. Nothing leaves your browser.",
   "s0.showKey.note": "…which is exactly what never happens for real.",
 
   "s0.lens.hint": "you'll answer this for ECDSA and for hash-based signatures next",
 
-  "s0.landing.nft": "Quantum doesn't just take your ETH — an NFT is a record guarded by the same signature.",
+  "s0.landing.nft": "Quantum doesn't just threaten coins — an NFT is a record guarded by the same signature.",
   // Replaces the old "the same machinery..." wording (a tracked fix,
   // docs/PROVENANCE.md C-19): "machinery" was literally false — passports, PDFs and OS
   // updates use different algorithms (RSA/ECDSA/EdDSA/OpenPGP). What they share is the

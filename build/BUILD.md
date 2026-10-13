@@ -10,8 +10,8 @@ node tools/build.mjs
 
 ## Artifact sha256
 
-- build/intro.js: `d2541bb2c3caba827bd137b8bc05dff931b993701614456ad476d38e312bb2ec`
-- build/ecdsa.js: `eb9805afce7606aa6d3e574f8e58e69a496e431d890ed072452ac9df854ab123`
-- build/hash.js: `086ec756f37d0bc86859515090b321b5997988480036b56fe3bb67795ccd9f0d`
+- build/intro.js: `96049493398e234915b3333c206cf86af2e6412ace5f6f822a73cf12b5520fdb`
+- build/ecdsa.js: `94810c9012b90246e436b128e103a2ae635349ec2a434fb312cc12f0eee58862`
+- build/hash.js: `16696cf89eb902bb7cb047f0fb3f15a828162930939c3f5e3f905f72cf8a99d8`
 
 Verify: `node tools/build.mjs --check` (exits non-zero on mismatch).

@@ -233,7 +233,7 @@ The provenance review deliberately did **not** add these rows to the table in a 
 - **Primary source:** a corollary of SEC1 **§4.1.3** — the output of the signing operation is `(r, s)`; `d` is an input, not an output. Recovery in reverse is possible only through the listed failures (C-6, C-7, C-9). [primary ✓ web] The limitation is stated in C-12.
 - **Verdict:** 🟢 as a derivation (in the UI — "derived from", not "defined in").
 
-### C-18 · "Quantum doesn't just take your ETH — an NFT is a record guarded by the same signature"
+### C-18 · "Quantum doesn't just threaten coins — an NFT is a record guarded by the same signature"
 
 - **Product statement (EN):** *"An NFT is not a file you hold — it is a ledger entry, and the only thing that authorizes moving it is an ECDSA signature on the very same curve. Whatever breaks the signature breaks the ownership."*
 - **Screens:** `s0` · **kind:** `standard`
