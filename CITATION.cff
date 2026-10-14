@@ -3,9 +3,11 @@ message: "If you use this, please cite it as below."
 title: "The Signature Explorer"
 type: software
 authors:
-  - alias: anaexplores
-version: "2026-09-28"
-date-released: "2026-09-28"
+  - given-names: Ana
+    family-names: Do
+    alias: anaexplores
+version: "1.0.0"
+date-released: "2026-10-15"
 url: "https://anaexplores.github.io/the-signature-explorer/"
 repository-code: "https://github.com/anaexplores/the-signature-explorer"
 license: MIT

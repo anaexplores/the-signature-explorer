@@ -83,6 +83,14 @@ These are gaps in the checks themselves, found by deliberately breaking each gat
 - **The secret scan reads only files in the git index**, so a file that has not been `git add`ed yet is not scanned. In a repository with nothing staged it scans nothing and still reports success.
 - **The secret scan also skips some file types by design**: HTML, CSS, SVG, the license files, `CITATION.cff`, `package-lock.json`, the generated bundles in `build/`, and images.
 
+## Open questions
+
+If you teach this or build on it, these are the places where I would most like a second opinion.
+
+- Which of the exercises is the first one students get stuck on, and why?
+- Is the SPHINCS+ walkthrough the right depth for an Ethereum engineer who has never seen hash-based signatures, or still too dense?
+- Are there claims on the screens whose source you would challenge? Every claim has a source entry in the claims registry.
+
 ## Development
 
 Requires Node.js 19 or newer.
