@@ -1,5 +1,7 @@
 # The Signature Explorer
 
+[![DOI](https://img.shields.io/badge/DOI-10.6084%2Fm9.figshare.34515198-blue)](https://doi.org/10.6084/m9.figshare.34515198)
+
 An interactive explainer of digital signatures, from ECDSA to post-quantum hash-based schemes.
 For teachers of post-quantum cryptography, their students, and Ethereum engineers who want to see why signatures break and what replaces them.
 
